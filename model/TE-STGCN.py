@@ -237,9 +237,9 @@ class EdgeConv(nn.Module):
         return feature
     
 
-class AHA(nn.Module):
+class MSA(nn.Module):
     def __init__(self, in_channels, num_layers, CoM):
-        super(AHA, self).__init__()
+        super(MSA, self).__init__()
         
         self.num_layers = num_layers
         
@@ -323,7 +323,7 @@ class HD_Gconv(nn.Module):
             self.conv.append(self.conv_d)
             
         if self.att:
-            self.aha = AHA(out_channels, num_layers=self.num_layers, CoM=CoM)
+            self.MSA = MSA(out_channels, num_layers=self.num_layers, CoM=CoM)
             
         if residual:
             if in_channels != out_channels:
@@ -368,7 +368,7 @@ class HD_Gconv(nn.Module):
             
         out = torch.stack(out, dim=2)
         if self.att:
-            out = self.aha(out)
+            out = self.MSA(out)
         else:
             out = out.sum(dim=2, keepdim=False)
             
